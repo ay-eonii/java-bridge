@@ -32,6 +32,7 @@ public class ResultMaker {
         if (!bridgeGame.hasBridgeLeft()) {
             return result.append(createResult())
                     .append(System.lineSeparator())
+                    .append(System.lineSeparator())
                     .append(String.format(RESULT_TEMPLATE, SUCCESS, bridgeGame.getPlayCount()))
                     .toString();
         }
