@@ -2,9 +2,11 @@ package bridge.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResultMaker {
-    private static final String BRIDGE_EDGE = "[ %s ]";
+    private static final String BRIDGE_START_EDGE = "[ ";
+    private static final String BRIDGE_END_EDGE = " ]";
     private static final String BRIDGE_SEPARATE_SYMBOL = " | ";
     private static final String RESULT_TEMPLATE = "게임 성공 여부: %s\n총 시도한 횟수: %d";
     private static final String SUCCESS = "성공";
@@ -43,14 +45,9 @@ public class ResultMaker {
     }
 
     private static String createResult() {
-        StringBuilder result = new StringBuilder();
-        String upResult = String.join(BRIDGE_SEPARATE_SYMBOL, upBridge);
-        String downResult = String.join(BRIDGE_SEPARATE_SYMBOL, downBridge);
-
-        return result.append(String.format(BRIDGE_EDGE, upResult))
-                .append(System.lineSeparator())
-                .append(String.format(BRIDGE_EDGE, downResult))
-                .toString();
+        String upResult = upBridge.stream().collect(Collectors.joining(BRIDGE_SEPARATE_SYMBOL, BRIDGE_START_EDGE, BRIDGE_END_EDGE));
+        String downResult = downBridge.stream().collect(Collectors.joining(BRIDGE_SEPARATE_SYMBOL, BRIDGE_START_EDGE, BRIDGE_END_EDGE));
+        return String.join(System.lineSeparator(), upResult, downResult);
     }
 
     private static void markSuccessResult(String moving) {
@@ -60,27 +57,6 @@ public class ResultMaker {
         }
         if (Move.D.name().equals(moving)) {
             downBridge.add("O");
-            upBridge.add(" ");
-        }
-    }
-
-    private static void mark(String moving, boolean isCorrect) {
-        if (Move.U.name().equals(moving)) {
-            if (isCorrect) {
-                upBridge.add("O");
-            }
-            if (!isCorrect) {
-                upBridge.add("X");
-            }
-            downBridge.add(" ");
-        }
-        if (Move.D.name().equals(moving)) {
-            if (isCorrect) {
-                downBridge.add("O");
-            }
-            if (!isCorrect) {
-                downBridge.add("X");
-            }
             upBridge.add(" ");
         }
     }
