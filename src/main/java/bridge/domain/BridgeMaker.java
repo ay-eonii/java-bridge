@@ -22,12 +22,8 @@ public class BridgeMaker {
         List<String> bridge = new LinkedList<>();
         while (bridge.size() != size) {
             int generate = bridgeNumberGenerator.generate();
-            if (generate == 0) {
-                bridge.add("D");
-            }
-            if (generate == 1) {
-                bridge.add("U");
-            }
+            String move = Move.match(generate).name();
+            bridge.add(move);
         }
         return bridge;
     }
