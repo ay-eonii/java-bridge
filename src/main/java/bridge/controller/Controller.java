@@ -12,22 +12,22 @@ public class Controller {
 
     public void execute() {
         outputView.printGreetings();
-
-        int size = inputView.readBridgeSize();
-        Bridge bridge = new Bridge(size);
+        Bridge bridge = new Bridge(inputView.readBridgeSize());
         BridgeGame bridgeGame = new BridgeGame(bridge);
-
-        boolean retry;
-        do {
-            prepare(bridgeGame);
-            if (play(bridgeGame) && !bridgeGame.hasBridgeLeft()) {
-                break;
-            }
-            String gameCommand = inputView.readGameCommand();
-            retry = bridgeGame.retry(gameCommand);
-        } while (retry);
-
+        start(bridgeGame);
         outputView.printResult(ResultMaker.getResult(bridgeGame));
+    }
+
+    private void start(BridgeGame bridgeGame) {
+        prepare(bridgeGame);
+        play(bridgeGame);
+        if (!bridgeGame.hasLeft()) {
+            return;
+        }
+        String gameCommand = inputView.readGameCommand();
+        if (bridgeGame.retry(gameCommand)) {
+            start(bridgeGame);
+        }
     }
 
     private void prepare(BridgeGame bridgeGame) {
@@ -35,14 +35,13 @@ public class Controller {
         bridgeGame.initGame();
     }
 
-    private boolean play(BridgeGame bridgeGame) {
-        boolean isMovable;
-        do {
-            String moving = inputView.readMoving();
-            isMovable = bridgeGame.move(moving);
-            String result = ResultMaker.getResult(moving, isMovable);
-            outputView.printMap(result);
-        } while (isMovable && bridgeGame.hasBridgeLeft());
-        return isMovable;
+    private void play(BridgeGame bridgeGame) {
+        String moving = inputView.readMoving();
+        boolean isMovable = bridgeGame.move(moving);
+        String result = ResultMaker.getResult(moving, isMovable);
+        outputView.printMap(result);
+        if (isMovable && bridgeGame.hasLeft()) {
+            play(bridgeGame);
+        }
     }
 }

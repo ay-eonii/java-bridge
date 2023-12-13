@@ -15,8 +15,8 @@ public class Bridge {
         return bridge.get(location).equals(moving);
     }
 
-    public boolean hasBridgeLeft(int location) {
-        return location != bridge.size();
+    public boolean hasLeft(int location) {
+        return location != bridge.size() - 1;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class ResultMaker {
 
     public static String getResult(BridgeGame bridgeGame) {
         StringBuilder result = new StringBuilder();
-        if (!bridgeGame.hasBridgeLeft()) {
+        if (!bridgeGame.hasLeft()) {
             return result.append(createResult())
                     .append(System.lineSeparator())
                     .append(System.lineSeparator())
