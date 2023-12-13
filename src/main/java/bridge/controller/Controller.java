@@ -12,6 +12,6 @@ public class Controller {
         outputView.printGreetings();
         int size = inputView.readBridgeSize();
         Bridge bridge = new Bridge(size);
-
+        inputView.readMoving();
     }
 }
