@@ -6,6 +6,9 @@ import java.util.List;
 public class ResultMaker {
     private static final String BRIDGE_EDGE = "[ %s ]";
     private static final String BRIDGE_SEPARATE_SYMBOL = " | ";
+    private static final String RESULT_TEMPLATE = "게임 성공 여부: %s\n총 시도한 횟수: %d";
+    private static final String SUCCESS = "성공";
+    private static final String FAIL = "실패";
     private static List<String> upBridge = new ArrayList<>();
     private static List<String> downBridge = new ArrayList<>();
 
@@ -22,6 +25,20 @@ public class ResultMaker {
             markFailResult(moving);
         }
         return createResult();
+    }
+
+    public static String getResult(BridgeGame bridgeGame) {
+        StringBuilder result = new StringBuilder();
+        if (!bridgeGame.hasBridgeLeft()) {
+            return result.append(createResult())
+                    .append(System.lineSeparator())
+                    .append(String.format(RESULT_TEMPLATE, SUCCESS, bridgeGame.getPlayCount()))
+                    .toString();
+        }
+        return result.append(createResult())
+                .append(System.lineSeparator())
+                .append(String.format(RESULT_TEMPLATE, FAIL, bridgeGame.getPlayCount()))
+                .toString();
     }
 
     private static String createResult() {

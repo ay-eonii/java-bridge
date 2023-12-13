@@ -16,7 +16,7 @@ public class Bridge {
     }
 
     public boolean hasBridgeLeft(int location) {
-        return location < bridge.size() - 1;
+        return location != bridge.size();
     }
 
     @Override

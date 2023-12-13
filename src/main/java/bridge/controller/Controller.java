@@ -9,29 +9,33 @@ import bridge.view.OutputView;
 public class Controller {
     private final OutputView outputView = new OutputView();
     private final InputView inputView = new InputView();
-    private final BridgeGame bridgeGame = new BridgeGame();
 
     public void execute() {
         outputView.printGreetings();
 
         int size = inputView.readBridgeSize();
         Bridge bridge = new Bridge(size);
-        bridgeGame.initGame(bridge);
+        BridgeGame bridgeGame = new BridgeGame(bridge);
 
-        String gameCommand;
+        boolean retry;
         do {
-            prepare();
-            play();
-            gameCommand = inputView.readGameCommand();
-        } while (bridgeGame.retry(gameCommand));
+            prepare(bridgeGame);
+            if (play(bridgeGame) && !bridgeGame.hasBridgeLeft()) {
+                break;
+            }
+            String gameCommand = inputView.readGameCommand();
+            retry = bridgeGame.retry(gameCommand);
+        } while (retry);
+
+        outputView.printResult(ResultMaker.getResult(bridgeGame));
     }
 
-    private void prepare() {
+    private void prepare(BridgeGame bridgeGame) {
         ResultMaker.initResult();
         bridgeGame.initGame();
     }
 
-    private void play() {
+    private boolean play(BridgeGame bridgeGame) {
         boolean isMovable;
         do {
             String moving = inputView.readMoving();
@@ -39,5 +43,6 @@ public class Controller {
             String result = ResultMaker.getResult(moving, isMovable);
             outputView.printMap(result);
         } while (isMovable && bridgeGame.hasBridgeLeft());
+        return isMovable;
     }
 }
